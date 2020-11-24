@@ -10,15 +10,12 @@ print(df.head())
 # print(df.iloc[1,4:6])
 
 volcanoes_coord = []
-for row in df:
-    print("ROW", row)
+for row in df.values:
     volcanoes_coord.append([row[4], row[5]])
-print(volcanoes_coord)
 
 feature_group = folium.FeatureGroup(name="My Map")
-volcanoes = [[45, -122], [44.5, -121.5]]
 
-for volcano in volcanoes:
+for volcano in volcanoes_coord:
     feature_group.add_child(folium.Marker(location=volcano, popup="New Marker",
                             icon=folium.Icon(color="green")))
 
