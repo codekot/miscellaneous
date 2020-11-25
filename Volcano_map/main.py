@@ -1,5 +1,6 @@
 import folium
 import pandas as pd
+import json
 
 starting_location = [45.5, -122.7]
 map = folium.Map(location=starting_location, zoom_start=6, tiles="Stamen "
@@ -38,12 +39,15 @@ def color_code(code):
 
 
 for row in df.values:
-    location = [row[4], row[5]]
+    location = (row[4], row[5])
     volcano_name = row[1]
     color = color_code(row[9])
-    feature_group.add_child(folium.CircleMarker(location=location, radius=10,
-                                        popup=volcano_name, fill_color=color,
-                                        color="grey", fill_opacity=0.85))
+    feature_group.add_child(
+        folium.CircleMarker(location=location, radius=10, popup=volcano_name,
+                            fill_color=color, color="grey", fill_opacity=0.85))
+
+county_json = json.load(open("gz_2010_us_050_00_500k.json", "r"))
+feature_group.add_child(folium.GeoJson(data=county_json))
 
 map.add_child(feature_group)
 map.save("Map1.html")
