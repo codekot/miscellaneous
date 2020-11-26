@@ -49,5 +49,15 @@ for row in df.values:
 county_json = json.load(open("gz_2010_us_050_00_500k.json", "r"))
 feature_group.add_child(folium.GeoJson(data=county_json))
 
+
+def set_color(x):
+    return {'fillColor': 'green' if x['properties']["POP2005"] < 10000000
+    else "orange" if 10000000 <= x["properties"]["POP2005"] < 20000000
+    else "red"}
+
+world_json = open("world.json", "r", encoding="utf-8-sig").read()
+feature_group.add_child(folium.GeoJson(data=world_json,
+                                       style_function=set_color))
+
 map.add_child(feature_group)
 map.save("Map1.html")
