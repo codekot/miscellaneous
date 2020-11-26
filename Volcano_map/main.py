@@ -10,7 +10,7 @@ df = pd.read_csv("volcanoes-2020.tsv", delimiter="\t", )
 print(df.info())
 print(df.head())
 
-feature_group = folium.FeatureGroup(name="My Map")
+volcano_group = folium.FeatureGroup(name="Volcano Map")
 
 
 def color_code(code):
@@ -42,12 +42,13 @@ for row in df.values:
     location = (row[4], row[5])
     volcano_name = row[1]
     color = color_code(row[9])
-    feature_group.add_child(
+    volcano_group.add_child(
         folium.CircleMarker(location=location, radius=10, popup=volcano_name,
                             fill_color=color, color="grey", fill_opacity=0.85))
 
+county_boundaries_group = folium.FeatureGroup(name="US County Boundaries")
 county_json = json.load(open("gz_2010_us_050_00_500k.json", "r"))
-feature_group.add_child(folium.GeoJson(data=county_json))
+county_boundaries_group.add_child(folium.GeoJson(data=county_json))
 
 
 def set_color(x):
@@ -55,9 +56,14 @@ def set_color(x):
     else "orange" if 10000000 <= x["properties"]["POP2005"] < 20000000
     else "red"}
 
+world_population_group = folium.FeatureGroup(name="World Population")
 world_json = open("world.json", "r", encoding="utf-8-sig").read()
-feature_group.add_child(folium.GeoJson(data=world_json,
+world_population_group.add_child(folium.GeoJson(data=world_json,
                                        style_function=set_color))
 
-map.add_child(feature_group)
+map.add_child(volcano_group)
+map.add_child(county_boundaries_group)
+map.add_child(world_population_group)
+map.add_child(folium.LayerControl())
+
 map.save("Map1.html")
