@@ -3,6 +3,9 @@ import sqlite3
 DATABASE = "lite.db"
 
 def create_table():
+    """
+    function creating table in database
+    """
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     cursor.execute("""
