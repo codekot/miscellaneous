@@ -46,7 +46,7 @@ def delete(item):
         dbname=DATABASE, user=USER, password=PASSWORD, host=HOST, port=PORT
     )
     cursor = connection.cursor()
-    cursor.execute("DELETE FROM store WHERE item=?", (item,))
+    cursor.execute("DELETE FROM store WHERE item=%s", (item,))
     connection.commit()
     connection.close()
 
@@ -56,14 +56,14 @@ def update(item, quantity, price):
         dbname=DATABASE, user=USER, password=PASSWORD, host=HOST, port=PORT
     )
     cursor = connection.cursor()
-    cursor.execute("UPDATE store SET quantity=?, price=? WHERE item=?",
+    cursor.execute("UPDATE store SET quantity=%s, price=%s WHERE item=%s",
                    (quantity, price, item))
     connection.commit()
     connection.close()
 
 
 create_table()
-insert("Coffee Cup", 10, 5)
+# insert("Coffee Cup", 10, 5)
 # insert('Wine Glass', 8, 10.5)
 # delete("Coffee Cup")
 # update("Wine Glass", 10, 15)
