@@ -16,5 +16,16 @@ class User:
     def __repr__(self):
         return f"<User {self.name}>"
 
+    def add_movie(self, name, genre, watched=False):
+        movie = Movie(name, genre, watched)
+        self.movies.append(movie)
+
+    def delete_movie(self, name):
+        for count, value in enumerate(self.movie):
+            if value.name == name:
+                self.movies.pop(value)
+        
+
+
     def watched_movies(self):
         return list(filter(lambda movie: movie.watched, self.movies))
