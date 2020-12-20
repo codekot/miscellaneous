@@ -21,9 +21,7 @@ class User:
         self.movies.append(movie)
 
     def delete_movie(self, name):
-        for count, value in enumerate(self.movie):
-            if value.name == name:
-                self.movies.pop(value)
+        self.movies = list(filter(lambda movie: movie.name!=name, self.movies))
         
 
 
