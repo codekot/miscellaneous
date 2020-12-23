@@ -30,4 +30,21 @@ class User:
         with open(f"{self.name}.txt", "w") as f:
             f.write(self.name + '\n')
             for movie in self.movies:
-                f.write(f"{movie.name},{movie.genre},{movie.watched}")
+                f.write(f"{movie.name},{movie.genre},{movie.watched}\n")
+
+    @classmethod
+    def load_from_file(cls, filename):
+        with open(filename, "r") as f:
+            content = f.readlines()
+            username = content[0]
+            movies = []
+            for line in content[1:]:
+                movie_data = line.split(",")
+                print(movie_data)
+                print(movie_data[2][:-1])
+                movies.append(Movie(
+                    movie_data[0], movie_data[1], movie_data[2][:-1]=="True"))
+            user = cls(username)
+            user.movies = movies
+            return user
+
