@@ -22,8 +22,12 @@ class User:
 
     def delete_movie(self, name):
         self.movies = list(filter(lambda movie: movie.name!=name, self.movies))
-        
-
 
     def watched_movies(self):
         return list(filter(lambda movie: movie.watched, self.movies))
+
+    def save_to_file(self):
+        with open(f"{self.name}.txt", "w") as f:
+            f.write(self.name + '\n')
+            for movie in self.movies:
+                f.write(f"{movie.name},{movie.genre},{movie.watched}")
