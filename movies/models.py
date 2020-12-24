@@ -8,7 +8,8 @@ class Movie:
         self.watched = watched
 
     def __repr__(self):
-        return f"<Movie: {self.name}, genre: {self.genre}>"
+        return f"<Movie: {self.name},"\
+                f"genre: {self.genre}, watched: {self.watched}>"
 
     def json(self):
         return {
@@ -16,6 +17,14 @@ class Movie:
             "genre": self.genre,
             "watched": self.watched
         }
+
+    @classmethod
+    def from_json(cls, json):
+        return cls(
+            name = json["name"],
+            genre = json["genre"],
+            watched = json["watched"]
+        )
 
 
 class User:
@@ -47,6 +56,16 @@ class User:
     def save_to_json(self):
         with open(f"{self.name}.json", "w") as f:
             json.dump(self.to_json(), f)
+
+    @classmethod
+    def from_json(cls, json):
+        user =cls(name = json["name"])
+        user.movies = [
+                Movie.from_json(movie) for movie in json["movies"]
+            ]
+        return user
+
+
 
 
 

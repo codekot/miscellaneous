@@ -12,3 +12,10 @@ print(user.watched_movies())
 print(user.to_json())
 
 user.save_to_json()
+
+with open("John.json", "r") as f:
+    json_data = json.load(f)
+    new_user = User.from_json(json_data)
+
+print("NEW", new_user)
+print("NEW", new_user.movies)
