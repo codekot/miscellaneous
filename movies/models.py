@@ -1,3 +1,6 @@
+import json
+
+
 class Movie:
     def __init__(self, name, genre, watched=False):
         self.name = name
@@ -6,6 +9,13 @@ class Movie:
 
     def __repr__(self):
         return f"<Movie: {self.name}, genre: {self.genre}>"
+
+    def json(self):
+        return {
+            "name": self.name,
+            "genre": self.genre,
+            "watched": self.watched
+        }
 
 
 class User:
@@ -26,25 +36,18 @@ class User:
     def watched_movies(self):
         return list(filter(lambda movie: movie.watched, self.movies))
 
-    def save_to_file(self):
-        with open(f"{self.name}.txt", "w") as f:
-            f.write(self.name + '\n')
-            for movie in self.movies:
-                f.write(f"{movie.name},{movie.genre},{movie.watched}\n")
+    def to_json(self):
+        return {
+            "name": self.name,
+            "movies": [
+                movie.json() for movie in self.movies
+            ]
+        }
 
-    @classmethod
-    def load_from_file(cls, filename):
-        with open(filename, "r") as f:
-            content = f.readlines()
-            username = content[0]
-            movies = []
-            for line in content[1:]:
-                movie_data = line.split(",")
-                print(movie_data)
-                print(movie_data[2][:-1])
-                movies.append(Movie(
-                    movie_data[0], movie_data[1], movie_data[2][:-1]=="True"))
-            user = cls(username)
-            user.movies = movies
-            return user
+    def save_to_json(self):
+        with open(f"{self.name}.json", "w") as f:
+            json.dump(self.to_json(), f)
+
+
+
 
