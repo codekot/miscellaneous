@@ -8,8 +8,8 @@ class Movie:
         self.watched = watched
 
     def __repr__(self):
-        return f"<Movie: {self.name},"\
-                f"genre: {self.genre}, watched: {self.watched}>"
+        return f"<Movie: {self.name}," \
+               f"genre: {self.genre}, watched: {self.watched}>"
 
     def json(self):
         return {
@@ -19,11 +19,11 @@ class Movie:
         }
 
     @classmethod
-    def from_json(cls, json):
+    def from_json(cls, json_data):
         return cls(
-            name = json["name"],
-            genre = json["genre"],
-            watched = json["watched"]
+            name=json_data["name"],
+            genre=json_data["genre"],
+            watched=json_data["watched"]
         )
 
 
@@ -40,7 +40,8 @@ class User:
         self.movies.append(movie)
 
     def delete_movie(self, name):
-        self.movies = list(filter(lambda movie: movie.name!=name, self.movies))
+        self.movies = list(
+            filter(lambda movie: movie.name != name, self.movies))
 
     def watched_movies(self):
         return list(filter(lambda movie: movie.watched, self.movies))
@@ -58,15 +59,9 @@ class User:
             json.dump(self.to_json(), f)
 
     @classmethod
-    def from_json(cls, json):
-        user =cls(name = json["name"])
+    def from_json(cls, json_data):
+        user = cls(name=json_data["name"])
         user.movies = [
-                Movie.from_json(movie) for movie in json["movies"]
-            ]
+            Movie.from_json(movie) for movie in json_data["movies"]
+        ]
         return user
-
-
-
-
-
-

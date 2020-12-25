@@ -1,5 +1,18 @@
 from models import Movie, User
 import json
+import os
+
+
+def file_exist(filename):
+    return os.path.isfile(filename)
+
+
+def menu():
+    name = input("Enter your name: ")
+    filename = f"{name}.txt"
+    if file_exist(filename):
+        pass
+
 
 user = User("John")
 new_movie = Movie("Home Alone", "comedy", True)
