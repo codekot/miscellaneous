@@ -7,13 +7,13 @@ $IND_NUMBER = 0;
 $BORDER = 4;
 $MUTATION_RATE = 2;
 $FITTEST_QUOTE = 4;
-$EVOLUTION_CYCLES = 2;
+$EVOLUTION_CYCLES = 50;
 $CURRENT_POPULATION = [];
 
 
 function fitness($individual){
     global $GOAL;
-    print_individual($individual);
+    //print_individual($individual);
     return array_sum($individual)/array_sum($GOAL);
 }
 
@@ -35,29 +35,32 @@ function generate_population($population = [], $quantity = 10){
 }
 
 function choose_fittest($population){
-    print_population($population);
+    //print_population($population);
     foreach($population as &$individual) {
         $individual[0] = fitness($individual[2]);
-        echo $individual[0];
+        //echo $individual[0];
     }
     unset($individual);
-    arsort($population);
-
+    rsort($population);
     return $population;
 }
 
+function print_array($array){
+    $str = inplode(", ", $array);
+    return "[".$str."]";
+}
+
 function print_individual($individual){
-    foreach ($individual as $item) {
-        echo "[" . $item . "]";
-    }
-    echo "\n";
+    echo json_encode($individual);
+
 }
 
 function print_population($population){
-    echo "POPULATION";
+    echo "POPULATION\n";
     foreach($population as $individual){
         print_individual($individual);
     }
+    echo "\n";
 }
 
 function cut_weakest($population){
@@ -74,7 +77,7 @@ function mutate_population($population){
     // fifth remain
     // last is random
     for ($i=0; $i<$FITTEST_QUOTE; $i++){
-        $population[$i+5] = [0.0, $IND_NUMBER, mutate_individual($population[$i][3])];
+        $population[$i+5] = [0.0, $IND_NUMBER, mutate_individual($population[$i][2])];
         $IND_NUMBER++;
     }
     $population[9] = [0.0, $IND_NUMBER, generate_individual()];
@@ -134,20 +137,23 @@ function goal_achieved($population){
     }
 }
 
+
 function main(){
     global $EVOLUTION_CYCLES;
     global $CURRENT_POPULATION;
     $population = generate_population();
-    $i = 0;
-    while($i<$EVOLUTION_CYCLES || !goal_achieved($population)){
+    $index = 0;
+    while($index < $EVOLUTION_CYCLES || goal_achieved($population)) {
+        echo "STEP ".$index."\n";
         $population = evolution_step($population);
-        $i++;
+        print_population($population);
+        $index++;
     }
 
-    echo "End cicles";
-    echo "Final population:";
-    echo var_dump($CURRENT_POPULATION);
-    echo var_dump($population);
+    echo "End cicles\n";
+    echo "Final population:\n";
+    print_population($CURRENT_POPULATION);
+    print_population($population);
 }
 
 main();
