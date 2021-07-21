@@ -3,13 +3,13 @@
 // using genetic algorithm MaxOne on array
 
 $GOAL = [1,1,1,1,1,1,1,1,1,1];
-$IND_NUMBER = 0;
+$IND_NUMBER = 1;
 $BORDER = 4;
 $MUTATION_RATE = 2;
 $FITTEST_QUOTE = 4;
 $EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
-$ITERATIONS = 100;
+$ITERATIONS = 1000;
 
 
 function fitness($individual): float{
@@ -131,10 +131,12 @@ function goal_achieved($population): bool{
 }
 
 function evolution_cycle(){
+    global $IND_NUMBER;
     global $EVOLUTION_CYCLES;
+    $IND_NUMBER = 1;
     $population = generate_population();
-    $index = 1;
-    while(!goal_achieved($population) && $index <= $EVOLUTION_CYCLES) {
+    $index = 0;
+    while(!goal_achieved($population) && $index < $EVOLUTION_CYCLES) {
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
         print_population($population);
@@ -150,22 +152,12 @@ function main(){
         $results[] = evolution_cycle();
     }
     $average = array_sum($results)/count($results);
+    $max = max($results);
+    $min = min($results);
     echo json_encode($results)."\n";
-    echo "Average number of steps to achieve goal fitness $average";
-//    global $EVOLUTION_CYCLES;
-//    $population = generate_population();
-//    $index = 1;
-//    while(!goal_achieved($population) && $index <= $EVOLUTION_CYCLES) {
-//        echo "STEP ".$index."\n";
-//        $population = evolution_step($population);
-//        print_population($population);
-//        $index++;
-//    }
-//
-//    echo "End cycles\n";
-//    echo "Goal achieved on $index steps\n";
-//    echo "Final population:\n";
-//    print_population($population);
+    echo "Average number of steps to achieve goal fitness $average\n";
+    echo "Minimum number of steps to achieve goal fitness $min\n";
+    echo "Maximum number of steps to achive goal fitness $max\n";
 }
 
 main();
