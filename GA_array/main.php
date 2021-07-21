@@ -9,6 +9,7 @@ $MUTATION_RATE = 2;
 $FITTEST_QUOTE = 4;
 $EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
+$ITERATIONS = 100;
 
 
 function fitness($individual): float{
@@ -47,7 +48,6 @@ function choose_fittest($population){
 
 function print_individual($individual){
     echo json_encode($individual)."\n";
-
 }
 
 function print_population($population){
@@ -56,13 +56,6 @@ function print_population($population){
         print_individual($individual);
     }
     echo "\n";
-}
-
-function cut_weakest($population){
-    global $BORDER;
-    for($i=0; $i<$BORDER; $i++){
-        array_pop($population);
-    }
 }
 
 function mutate_population($population){
@@ -137,22 +130,42 @@ function goal_achieved($population): bool{
     }
 }
 
-
-function main(){
+function evolution_cycle(){
     global $EVOLUTION_CYCLES;
     $population = generate_population();
-    $index = 0;
-    while(goal_achieved($population) ? false : $index < $EVOLUTION_CYCLES) {
+    $index = 1;
+    while(!goal_achieved($population) && $index <= $EVOLUTION_CYCLES) {
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
         print_population($population);
         $index++;
     }
+    return $index;
+}
 
-    echo "End cycles\n";
-    echo "Goal achieved on {$index} steps\n";
-    echo "Final population:\n";
-    print_population($population);
+function main(){
+    global $ITERATIONS;
+    $results = [];
+    for($i=0; $i<$ITERATIONS; $i++){
+        $results[] = evolution_cycle();
+    }
+    $average = array_sum($results)/count($results);
+    echo json_encode($results)."\n";
+    echo "Average number of steps to achieve goal fitness $average";
+//    global $EVOLUTION_CYCLES;
+//    $population = generate_population();
+//    $index = 1;
+//    while(!goal_achieved($population) && $index <= $EVOLUTION_CYCLES) {
+//        echo "STEP ".$index."\n";
+//        $population = evolution_step($population);
+//        print_population($population);
+//        $index++;
+//    }
+//
+//    echo "End cycles\n";
+//    echo "Goal achieved on $index steps\n";
+//    echo "Final population:\n";
+//    print_population($population);
 }
 
 main();
