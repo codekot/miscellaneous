@@ -46,7 +46,7 @@ function choose_fittest($population){
 }
 
 function print_individual($individual){
-    echo json_encode($individual);
+    echo json_encode($individual)."\n";
 
 }
 
