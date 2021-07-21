@@ -119,6 +119,11 @@ function mutate_individual($individual){
 function evolution_step($population){
     global $CURRENT_POPULATION;
     $population = choose_fittest($population);
+    // should break out of the cycle immediately as fittest individual occur
+    if(goal_achieved($population)){
+        echo "BREAK\n";
+        return $population;
+    }
     $population = mutate_population($population);
     $CURRENT_POPULATION = $population;
     return $population;
@@ -145,7 +150,7 @@ function main(){
     }
 
     echo "End cycles\n";
-    echo "Goal achived on {$index} steps\n";
+    echo "Goal achieved on {$index} steps\n";
     echo "Final population:\n";
     print_population($population);
 }
