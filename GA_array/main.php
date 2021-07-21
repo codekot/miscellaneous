@@ -1,23 +1,23 @@
 <?php
 
-// using genetic algorithm on array
+// using genetic algorithm MaxOne on array
 
 $GOAL = [1,1,1,1,1,1,1,1,1,1];
 $IND_NUMBER = 0;
 $BORDER = 4;
 $MUTATION_RATE = 2;
 $FITTEST_QUOTE = 4;
-$EVOLUTION_CYCLES = 50;
+$EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
 
 
-function fitness($individual){
+function fitness($individual): float{
     global $GOAL;
     //print_individual($individual);
     return array_sum($individual)/array_sum($GOAL);
 }
 
-function generate_individual(){
+function generate_individual(): array{
     $result = [];
     for($i=0; $i<10; $i++){
         $result[] = array_rand([0,1]);
@@ -43,11 +43,6 @@ function choose_fittest($population){
     unset($individual);
     rsort($population);
     return $population;
-}
-
-function print_array($array){
-    $str = inplode(", ", $array);
-    return "[".$str."]";
 }
 
 function print_individual($individual){
@@ -84,7 +79,7 @@ function mutate_population($population){
     return $population;
 }
 
-function random_with_probability($p=80){
+function random_with_probability($p=80): bool {
     $ans = rand(1,100);
     if($ans<$p){
         return true;
@@ -129,7 +124,7 @@ function evolution_step($population){
     return $population;
 }
 
-function goal_achieved($population){
+function goal_achieved($population): bool{
     if ($population[0][0] >= 1.0){
         return true;
     }  else {
@@ -140,19 +135,18 @@ function goal_achieved($population){
 
 function main(){
     global $EVOLUTION_CYCLES;
-    global $CURRENT_POPULATION;
     $population = generate_population();
     $index = 0;
-    while($index < $EVOLUTION_CYCLES || goal_achieved($population)) {
+    while(goal_achieved($population) ? false : $index < $EVOLUTION_CYCLES) {
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
         print_population($population);
         $index++;
     }
 
-    echo "End cicles\n";
+    echo "End cycles\n";
+    echo "Goal achived on {$index} steps\n";
     echo "Final population:\n";
-    print_population($CURRENT_POPULATION);
     print_population($population);
 }
 
