@@ -81,13 +81,14 @@ function random_with_probability($p=80): bool {
     }
 }
 
+// TODO: add function crossing
 
 function mutate_individual($individual){
     global $MUTATION_RATE;
     // choose how many mutation
     $mutation_quantity = rand(1, $MUTATION_RATE);
 
-    // choose which genes will be mutating
+    // choose which genes will be mutated
     $index_array = [];
     for($i=0; $i<$mutation_quantity; $i++){
         $index_value = rand(0, 9);
@@ -139,7 +140,7 @@ function evolution_cycle(){
     while(!goal_achieved($population) && $index < $EVOLUTION_CYCLES) {
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
-        print_population($population);
+        // print_population($population);
         $index++;
     }
     return $index;
