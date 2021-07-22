@@ -82,6 +82,18 @@ function random_with_probability($p=80): bool {
 }
 
 // TODO: add function crossing
+function one_point_crossover($parent1, $parent2, $cross_point=NULL){
+    // find point of crossover
+    if(!$cross_point){
+        $cross_point = rand(1,9);
+    }
+    // swap tail
+    $child1 = array_slice($parent1, 0,$cross_point);
+    $child2 = array_slice($parent2, 0, $cross_point);
+    $child1 = array_merge($child1, array_slice($parent2, $cross_point));
+    $child2 = array_merge($child2, array_slice($parent1, $cross_point));
+    return [$child1, $child2];
+}
 
 function mutate_individual($individual){
     global $MUTATION_RATE;
