@@ -81,18 +81,46 @@ function random_with_probability($p=80): bool {
     }
 }
 
-// TODO: add function crossing
 function one_point_crossover($parent1, $parent2, $cross_point=NULL){
     // find point of crossover
     if(!$cross_point){
         $cross_point = rand(1,9);
     }
-    // swap tail
+    // swap tails
     $child1 = array_slice($parent1, 0,$cross_point);
     $child2 = array_slice($parent2, 0, $cross_point);
     $child1 = array_merge($child1, array_slice($parent2, $cross_point));
     $child2 = array_merge($child2, array_slice($parent1, $cross_point));
     return [$child1, $child2];
+}
+
+function contest($player1, $player2){
+    if (fitness($player1)>fitness($player2)){
+        return $player1;
+    } else {
+        return $player2;
+    }
+}
+function tournament_crossing($population, $rounds=2){
+    $childrens = [];
+    for($i=0; $i<$rounds; $i++){
+        $parent1 = contest(rand($population)[2], rand($population)[2]);
+        $parent2 = contest(rand($population)[2], rand($population)[2]);
+        $childrens = array_merge($childrens, one_point_crossover($parent1, $parent2));
+    }
+    $population = array_merge(
+        array_slice($population, 0, -($rounds*2)),
+        $childrens);
+    return $population;
+}
+
+function population_crossing($population){
+    $result = [];
+    $rounds = 2;
+    for($i=0; $i<$rounds; $i++){
+
+    }
+
 }
 
 function mutate_individual($individual){
@@ -158,6 +186,14 @@ function evolution_cycle(){
     return $index;
 }
 
+function test_one_point_crossover(){
+    $p1 = [1,1,1,0,0,0,0,0,0,0];
+    $p2 = [0,0,0,1,1,1,1,1,1,1];
+    $test = one_point_crossover($p1, $p2, 3);
+    echo json_encode($test[0]);
+    echo json_encode($test[1]);
+
+}
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -173,4 +209,5 @@ function main(){
     echo "Maximum number of steps to achive goal fitness $max\n";
 }
 
-main();
+
+test_one_point_crossover();
