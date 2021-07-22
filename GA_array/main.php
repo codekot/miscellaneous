@@ -140,11 +140,12 @@ function mutate_individual($individual){
     // mutate selected genes with some probability
     foreach($index_array as $index){
         if(random_with_probability()){
-            if($individual[$index]){
-                $individual[$index] = 0;
-            } else {
-                $individual[$index] = 1;
-            }
+            $individual[$index] = $individual[$index] ? 0 : 1;
+//            if($individual[$index]){
+//                $individual[$index] = 0;
+//            } else {
+//                $individual[$index] = 1;
+//            }
         }
     }
     return $individual;
@@ -211,3 +212,4 @@ function main(){
 
 
 test_one_point_crossover();
+main();
