@@ -2,7 +2,8 @@
 
 // using genetic algorithm MaxOne on array
 
-$GOAL = [1,1,1,1,1,1,1,1,1,1];
+$INDIVIDUAL_LENGTH = 10;
+$GOAL = array_map(function($i){return 1}, range(1, $INDIVIDUAL_LENGTH));
 $IND_NUMBER = 1;
 $BORDER = 4;
 $MUTATION_RATE = 2;
@@ -11,6 +12,40 @@ $EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
 $ITERATIONS = 1000;
 
+class Individual {
+    static private int $current_number = 1;
+
+    public float $fitness;
+    public int $personal_number;
+    public array $array;
+
+    public function __construct(){
+        $this->array = self::generate_array();
+        $this->fitness = self::fitness();
+        $this->personal_number = self::get_number();
+    }
+
+    static private function generate_array(): array{
+        $result = [];
+        for($i=0; $i<10; $i++){
+            $result[] = array_rand([0,1]);
+        }
+        return $result;
+    }
+    static private function fitness($individual): float{
+        global $GOAL;
+        //print_individual($individual);
+        return array_sum($individual)/array_sum($GOAL);
+     }
+
+     static private function get_number(){
+        $number = self::$current_number;
+        self::$current_number ++;
+        return $number;
+     }
+
+
+}
 
 function fitness($individual): float{
     global $GOAL;
@@ -24,6 +59,12 @@ function generate_individual(): array{
         $result[] = array_rand([0,1]);
     }
     return $result;
+}
+
+function individual_for_population(){
+    global $IND_NUMBER;
+    $arr = generate_individual();
+
 }
 
 function generate_population($population = [], $quantity = 10){
@@ -109,8 +150,9 @@ function tournament_crossing($population, $rounds=2){
         $childrens = array_merge($childrens, one_point_crossover($parent1, $parent2));
     }
     $population = array_merge(
-        array_slice($population, 0, -($rounds*2)),
+        array_slice($population, 0, -($rounds*2)+1),
         $childrens);
+    $population[-1] = generate_individual();
     return $population;
 }
 
