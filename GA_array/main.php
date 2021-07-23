@@ -67,9 +67,21 @@ class Individual {
             if(random_with_probability()){
                $this->array[$index] = $this->array[$index] ? 0 : 1;
             }
-        }    }
+        }
+        $this->get_fitness();
+    }
 }
 
+
+class Population{
+    public array $set;
+
+    public function __construct($size = 10){
+        for ($i=0; $i<$size; $i++){
+            $set[] = new Individual();
+        }
+    }
+}
 
 function generate_population($population = [], $quantity = 10){
     global $IND_NUMBER;
