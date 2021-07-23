@@ -3,7 +3,7 @@
 // using genetic algorithm MaxOne on array
 
 $INDIVIDUAL_LENGTH = 10;
-$GOAL = array_map(function($i){return 1}, range(1, $INDIVIDUAL_LENGTH));
+$GOAL = array_map(function (){return 1;}, range(1, $INDIVIDUAL_LENGTH));
 $IND_NUMBER = 1;
 $BORDER = 4;
 $MUTATION_RATE = 2;
@@ -21,7 +21,7 @@ class Individual {
 
     public function __construct(){
         $this->array = self::generate_array();
-        $this->fitness = self::fitness();
+        $this->fitness = self::get_fitness();
         $this->personal_number = self::get_number();
     }
 
@@ -32,40 +32,44 @@ class Individual {
         }
         return $result;
     }
-    static private function fitness($individual): float{
+
+    private function get_fitness(): float{
         global $GOAL;
-        //print_individual($individual);
-        return array_sum($individual)/array_sum($GOAL);
+        return array_sum($this->array)/array_sum($GOAL);
      }
 
-     static private function get_number(){
-        $number = self::$current_number;
-        self::$current_number ++;
-        return $number;
-     }
-
-
-}
-
-function fitness($individual): float{
-    global $GOAL;
-    //print_individual($individual);
-    return array_sum($individual)/array_sum($GOAL);
-}
-
-function generate_individual(): array{
-    $result = [];
-    for($i=0; $i<10; $i++){
-        $result[] = array_rand([0,1]);
+    static private function get_number(){
+       $number = self::$current_number;
+       self::$current_number ++;
+       return $number;
     }
-    return $result;
+
+    public function __toString(){
+        return "Individual #$this->personal_number, fitness: $this->fitness ".json_encode($this->array)."\n";
+    }
+
+    public function mutate_individual(){
+        global $MUTATION_RATE;
+        // choose how many mutation
+        $mutation_quantity = rand(1, $MUTATION_RATE);
+
+        // choose which genes will be mutated
+        $index_array = [];
+        for($i=0; $i<$mutation_quantity; $i++){
+            $index_value = rand(0, 9);
+            if(!array_search($index_value, $index_array)) {
+                $index_array[] = $index_value;
+            }
+        }
+
+        // mutate selected genes with some probability
+        foreach($index_array as $index){
+            if(random_with_probability()){
+               $this->array[$index] = $this->array[$index] ? 0 : 1;
+            }
+        }    }
 }
 
-function individual_for_population(){
-    global $IND_NUMBER;
-    $arr = generate_individual();
-
-}
 
 function generate_population($population = [], $quantity = 10){
     global $IND_NUMBER;
@@ -87,9 +91,6 @@ function choose_fittest($population){
     return $population;
 }
 
-function print_individual($individual){
-    echo json_encode($individual)."\n";
-}
 
 function print_population($population){
     echo "POPULATION\n";
@@ -165,33 +166,7 @@ function population_crossing($population){
 
 }
 
-function mutate_individual($individual){
-    global $MUTATION_RATE;
-    // choose how many mutation
-    $mutation_quantity = rand(1, $MUTATION_RATE);
 
-    // choose which genes will be mutated
-    $index_array = [];
-    for($i=0; $i<$mutation_quantity; $i++){
-        $index_value = rand(0, 9);
-        if(!array_search($index_value, $index_array)) {
-            $index_array[] = $index_value;
-        }
-    }
-
-    // mutate selected genes with some probability
-    foreach($index_array as $index){
-        if(random_with_probability()){
-            $individual[$index] = $individual[$index] ? 0 : 1;
-//            if($individual[$index]){
-//                $individual[$index] = 0;
-//            } else {
-//                $individual[$index] = 1;
-//            }
-        }
-    }
-    return $individual;
-}
 
 function evolution_step($population){
     global $CURRENT_POPULATION;
@@ -235,8 +210,13 @@ function test_one_point_crossover(){
     $test = one_point_crossover($p1, $p2, 3);
     echo json_encode($test[0]);
     echo json_encode($test[1]);
-
 }
+
+function test_individual_to_string(){
+    $i = new Individual();
+    echo $i;
+}
+
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -253,5 +233,4 @@ function main(){
 }
 
 
-test_one_point_crossover();
-main();
+test_individual_to_string();
