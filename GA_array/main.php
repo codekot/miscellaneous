@@ -78,8 +78,20 @@ class Population{
 
     public function __construct($size = 10){
         for ($i=0; $i<$size; $i++){
-            $set[] = new Individual();
+            $this->set[] = new Individual();
         }
+    }
+
+    public function choose_fittest(){
+        rsort($this->set);
+    }
+
+    public function __toString(){
+        $result = "\nPOPULATION\n";
+        foreach($this->set as $individual){
+            $result .= $individual->__toString();
+        }
+        return $result;
     }
 }
 
@@ -229,6 +241,12 @@ function test_individual_to_string(){
     echo $i;
 }
 
+function test_population(){
+    echo "TEST POPULATION\n";
+    $p = new Population();
+    echo $p;
+}
+
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -246,3 +264,4 @@ function main(){
 
 
 test_individual_to_string();
+test_population();
