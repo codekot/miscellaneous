@@ -12,74 +12,18 @@ $EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
 $ITERATIONS = 1000;
 
-class Individual {
-    static private int $current_number = 1;
-
-    public float $fitness;
-    public int $personal_number;
-    public array $array;
-
-    public function __construct(){
-        $this->array = self::generate_array();
-        $this->fitness = self::get_fitness();
-        $this->personal_number = self::get_number();
-    }
-
-    static private function generate_array(): array{
-        $result = [];
-        for($i=0; $i<10; $i++){
-            $result[] = array_rand([0,1]);
-        }
-        return $result;
-    }
-
-    private function get_fitness(): float{
-        global $GOAL;
-        return array_sum($this->array)/array_sum($GOAL);
-     }
-
-    static private function get_number(){
-       $number = self::$current_number;
-       self::$current_number ++;
-       return $number;
-    }
-
-    public function __toString(){
-        return "Individual #$this->personal_number, fitness: $this->fitness ".json_encode($this->array)."\n";
-    }
-
-    public function mutate_individual(){
-        global $MUTATION_RATE;
-        // choose how many mutation
-        $mutation_quantity = rand(1, $MUTATION_RATE);
-
-        // choose which genes will be mutated
-        $index_array = [];
-        for($i=0; $i<$mutation_quantity; $i++){
-            $index_value = rand(0, 9);
-            if(!array_search($index_value, $index_array)) {
-                $index_array[] = $index_value;
-            }
-        }
-
-        // mutate selected genes with some probability
-        foreach($index_array as $index){
-            if(random_with_probability()){
-               $this->array[$index] = $this->array[$index] ? 0 : 1;
-            }
-        }
-        $this->get_fitness();
-    }
-}
+require_once  "Individual.php";
 
 
 class Population{
     public array $set;
+    public bool $goal_achieved = false;
 
     public function __construct($size = 10){
         for ($i=0; $i<$size; $i++){
             $this->set[] = new Individual();
         }
+        $this->choose_fittest();
     }
 
     public function choose_fittest(){
@@ -87,42 +31,40 @@ class Population{
     }
 
     public function __toString(){
-        $result = "\nPOPULATION\n";
+        $result = "POPULATION\n";
         foreach($this->set as $individual){
             $result .= $individual->__toString();
         }
         return $result;
     }
-}
 
-function generate_population($population = [], $quantity = 10){
-    global $IND_NUMBER;
-    for($i=0; $i<$quantity; $i++){
-        $population[] = [0.0, $IND_NUMBER, generate_individual()];
-        $IND_NUMBER++;
+    public function is_goal_achieved($population): bool{
+        if ($this->set[0][0] >= 1.0){
+            $this->goal_achieved = true;
+            return true;
+        }  else {
+            $this->goal_achieved = false;
+            return false;
+        }
     }
-    return $population;
-}
 
-function choose_fittest($population){
-    //print_population($population);
-    foreach($population as &$individual) {
-        $individual[0] = fitness($individual[2]);
-        //echo $individual[0];
+    function mutate_population(){
+        // TODO need to be combed
+        global $FITTEST_QUOTE;
+        global $IND_NUMBER;
+        // take first four of population and mutate it and fill the second half
+        // fifth remain
+        // last is random
+        for ($i=0; $i<$FITTEST_QUOTE; $i++){
+            $this->set[$i+5] = [0.0, Individual::get_number(), $this[$i]->mutate_individual()];
+        }
+        $population[9] = [0.0, $IND_NUMBER, generate_individual()];
+        return $population;
     }
-    unset($individual);
-    rsort($population);
-    return $population;
+
 }
 
 
-function print_population($population){
-    echo "POPULATION\n";
-    foreach($population as $individual){
-        print_individual($individual);
-    }
-    echo "\n";
-}
 
 function mutate_population($population){
     global $FITTEST_QUOTE;
@@ -247,6 +189,13 @@ function test_population(){
     echo $p;
 }
 
+function test_mutate_individual(){
+    $i = new Individual();
+    echo $i;
+    $i->mutate_individual();
+    echo $i;
+}
+
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -263,5 +212,6 @@ function main(){
 }
 
 
-test_individual_to_string();
-test_population();
+//test_individual_to_string();
+//test_population();
+test_mutate_individual();
