@@ -1,5 +1,6 @@
 <?php
 
+
 class Individual {
     static private int $current_number = 1;
 
@@ -36,6 +37,12 @@ class Individual {
         return "Individual #$this->personal_number, fitness: $this->fitness ".json_encode($this->array)."\n";
     }
 
+    public function clone_individual(){
+        $clone = clone $this;
+        $clone->personal_number = self::get_number();
+        return $clone;
+    }
+
     public function mutate_individual(){
         global $MUTATION_RATE;
         // choose how many mutation
@@ -51,11 +58,13 @@ class Individual {
         }
 
         // mutate selected genes with some probability
+        $clone = $this->clone_individual();
         foreach($index_array as $index){
             if(random_with_probability()){
-                $this->array[$index] = $this->array[$index] ? 0 : 1;
+                $clone->array[$index] = $clone->array[$index] ? 0 : 1;
             }
         }
-        $this->get_fitness();
+        $clone->get_fitness();
+        return $clone;
     }
 }

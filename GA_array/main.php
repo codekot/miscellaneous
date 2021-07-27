@@ -14,6 +14,14 @@ $ITERATIONS = 1000;
 
 require_once  "Individual.php";
 
+function random_with_probability($p=80): bool {
+    $ans = rand(1,100);
+    if($ans<$p){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 class Population{
     public array $set;
@@ -51,7 +59,6 @@ class Population{
     function mutate_population(){
         // TODO need to be combed
         global $FITTEST_QUOTE;
-        global $IND_NUMBER;
         // take first four of population and mutate it and fill the second half
         // fifth remain
         // last is random
@@ -80,14 +87,7 @@ function mutate_population($population){
     return $population;
 }
 
-function random_with_probability($p=80): bool {
-    $ans = rand(1,100);
-    if($ans<$p){
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 function one_point_crossover($parent1, $parent2, $cross_point=NULL){
     // find point of crossover
@@ -190,10 +190,15 @@ function test_population(){
 }
 
 function test_mutate_individual(){
-    $i = new Individual();
-    echo $i;
-    $i->mutate_individual();
-    echo $i;
+    $i1 = new Individual();
+    echo $i1;
+    $i2 = $i1->mutate_individual();
+    if($i2){
+        echo $i2;
+    } else {
+        echo "No muteted clone";
+    }
+
 }
 
 function main(){
