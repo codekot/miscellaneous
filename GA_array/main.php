@@ -6,9 +6,9 @@ $INDIVIDUAL_LENGTH = 10;
 $GOAL = array_map(function (){return 1;}, range(1, $INDIVIDUAL_LENGTH));
 $IND_NUMBER = 1;
 $BORDER = 4;
-$MUTATION_RATE = 2;
+$MUTATION_RATE = 4;
 $FITTEST_QUOTE = 4;
-$EVOLUTION_CYCLES = 100;
+$EVOLUTION_CYCLES = 10;
 $CURRENT_POPULATION = [];
 $ITERATIONS = 1000;
 
@@ -38,6 +38,11 @@ class Population{
         rsort($this->set);
     }
 
+    public function get_best_fittest_score(){
+        $this->choose_fittest();
+        return $this->set[0]->fitness;
+    }
+
     public function __toString(){
         $result = "POPULATION\n";
         $i=0;
@@ -52,8 +57,8 @@ class Population{
         return $result;
     }
 
-    public function is_goal_achieved($population): bool{
-        if ($this->set[0][0] >= 1.0){
+    public function is_goal_achieved(): bool{
+        if ($this->get_best_fittest_score() >= 1.0){
             $this->goal_achieved = true;
             return true;
         }  else {
@@ -73,7 +78,6 @@ class Population{
         }
         $this->set[9] = new Individual();
         $this->choose_fittest();
-        echo "Mutation complete\n";
     }
 
 }
@@ -141,18 +145,7 @@ function population_crossing($population){
 
 
 
-function evolution_step($population){
-    global $CURRENT_POPULATION;
-    $population = choose_fittest($population);
-    // should break out of the cycle immediately as fittest individual occur
-    if(goal_achieved($population)){
-        echo "BREAK\n";
-        return $population;
-    }
-    $population = mutate_population($population);
-    $CURRENT_POPULATION = $population;
-    return $population;
-}
+
 
 function goal_achieved($population): bool{
     if ($population[0][0] >= 1.0){
@@ -162,16 +155,30 @@ function goal_achieved($population): bool{
     }
 }
 
+function evolution_step($population){
+    global $CURRENT_POPULATION;
+    $population->choose_fittest();
+    // should break out of the cycle immediately as fittest individual occur
+    if($population->is_goal_achieved()){
+        echo "BREAK\n";
+        return $population;
+    }
+    $population->mutate_population();
+    $CURRENT_POPULATION = $population;
+    return $population;
+}
+
 function evolution_cycle(){
     global $IND_NUMBER;
     global $EVOLUTION_CYCLES;
     $IND_NUMBER = 1;
-    $population = generate_population();
+    $population = new Population();
     $index = 0;
-    while(!goal_achieved($population) && $index < $EVOLUTION_CYCLES) {
+    while(!$population->is_goal_achieved() && $index < $EVOLUTION_CYCLES) {
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
-        // print_population($population);
+        echo $population->get_best_fittest_score();
+        echo $population;
         $index++;
     }
     return $index;
@@ -183,6 +190,16 @@ function test_one_point_crossover(){
     $test = one_point_crossover($p1, $p2, 3);
     echo json_encode($test[0]);
     echo json_encode($test[1]);
+}
+
+function test_individual_get_fitness(){
+    global $GOAL;
+    $i = new Individual();
+    $i->array = [0,0,0,0,0,0,0,0,0,1];
+    echo $i->get_fitness();
+    echo $i->fitness;
+    echo json_encode($GOAL);
+
 }
 
 function test_individual_to_string(){
@@ -215,6 +232,17 @@ function test_mutate_population(){
     echo $p;
 }
 
+function test_evolution_step(){
+    $p = new Population();
+    echo $p;
+    $p = evolution_step($p);
+    echo $p;
+}
+
+function test_evolution_cycle(){
+    evolution_cycle();
+}
+
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -234,4 +262,7 @@ function main(){
 //test_individual_to_string();
 //test_population();
 //test_mutate_individual();
-test_mutate_population();
+//test_mutate_population();
+//test_evolution_step();
+test_evolution_cycle();
+//test_individual_get_fitness();

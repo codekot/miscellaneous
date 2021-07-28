@@ -22,9 +22,11 @@ class Individual {
         return $result;
     }
 
-    private function get_fitness(): float{
+    public function get_fitness(): float{
         global $GOAL;
-        return array_sum($this->array)/array_sum($GOAL);
+        $f = array_sum($this->array)/array_sum($GOAL);
+        $this->fitness = $f;
+        return $f;
     }
 
     static public function get_number(){
