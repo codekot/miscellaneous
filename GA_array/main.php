@@ -40,8 +40,14 @@ class Population{
 
     public function __toString(){
         $result = "POPULATION\n";
+        $i=0;
         foreach($this->set as $individual){
+            //var_dump($individual);
+            //echo $individual->__toString();
             $result .= $individual->__toString();
+            //$result .= $i;
+            //$i++;
+
         }
         return $result;
     }
@@ -63,17 +69,18 @@ class Population{
         // fifth remain
         // last is random
         for ($i=0; $i<$FITTEST_QUOTE; $i++){
-            $this->set[$i+5] = [0.0, Individual::get_number(), $this[$i]->mutate_individual()];
+            $this->set[$i+5] = $this->set[$i]->mutate_individual();
         }
-        $population[9] = [0.0, $IND_NUMBER, generate_individual()];
-        return $population;
+        $this->set[9] = new Individual();
+        $this->choose_fittest();
+        echo "Mutation complete\n";
     }
 
 }
 
 
 
-function mutate_population($population){
+function smutate_population($population){
     global $FITTEST_QUOTE;
     global $IND_NUMBER;
     // take first four of population and mutate it and fill the second half
@@ -201,6 +208,13 @@ function test_mutate_individual(){
 
 }
 
+function test_mutate_population(){
+    $p = new Population();
+    echo $p;
+    $p->mutate_population();
+    echo $p;
+}
+
 function main(){
     global $ITERATIONS;
     $results = [];
@@ -219,4 +233,5 @@ function main(){
 
 //test_individual_to_string();
 //test_population();
-test_mutate_individual();
+//test_mutate_individual();
+test_mutate_population();
