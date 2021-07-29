@@ -15,8 +15,9 @@ class Individual {
     }
 
     static private function generate_array(): array{
+        global $INDIVIDUAL_LENGTH;
         $result = [];
-        for($i=0; $i<10; $i++){
+        for($i=0; $i<$INDIVIDUAL_LENGTH; $i++){
             $result[] = array_rand([0,1]);
         }
         return $result;
@@ -47,13 +48,14 @@ class Individual {
 
     public function mutate_individual(){
         global $MUTATION_RATE;
+        global $INDIVIDUAL_LENGTH;
         // choose how many mutation
         $mutation_quantity = rand(1, $MUTATION_RATE);
 
         // choose which genes will be mutated
         $index_array = [];
         for($i=0; $i<$mutation_quantity; $i++){
-            $index_value = rand(0, 9);
+            $index_value = rand(0, $INDIVIDUAL_LENGTH-1);
             if(!array_search($index_value, $index_array)) {
                 $index_array[] = $index_value;
             }

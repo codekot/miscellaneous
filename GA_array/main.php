@@ -6,9 +6,9 @@ $INDIVIDUAL_LENGTH = 10;
 $GOAL = array_map(function (){return 1;}, range(1, $INDIVIDUAL_LENGTH));
 $IND_NUMBER = 1;
 $BORDER = 4;
-$MUTATION_RATE = 4;
+$MUTATION_RATE = 1;
 $FITTEST_QUOTE = 4;
-$EVOLUTION_CYCLES = 10;
+$EVOLUTION_CYCLES = 100;
 $CURRENT_POPULATION = [];
 $ITERATIONS = 1000;
 
@@ -178,7 +178,7 @@ function evolution_cycle(){
         echo "STEP ".$index."\n";
         $population = evolution_step($population);
         echo $population->get_best_fittest_score();
-        echo $population;
+        //echo $population;
         $index++;
     }
     return $index;
@@ -264,5 +264,6 @@ function main(){
 //test_mutate_individual();
 //test_mutate_population();
 //test_evolution_step();
-test_evolution_cycle();
+//test_evolution_cycle();
 //test_individual_get_fitness();
+main();
