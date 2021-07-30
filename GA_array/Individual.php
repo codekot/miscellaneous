@@ -30,7 +30,8 @@ class Individual {
         return $f;
     }
 
-    static public function get_number(){
+    static public function get_number(): int
+    {
         $number = self::$current_number;
         self::$current_number ++;
         return $number;
@@ -40,13 +41,15 @@ class Individual {
         return "Individual #$this->personal_number, fitness: $this->fitness ".json_encode($this->array)."\n";
     }
 
-    public function clone_individual(){
+    public function clone_individual(): Individual
+    {
         $clone = clone $this;
         $clone->personal_number = self::get_number();
         return $clone;
     }
 
-    public function mutate_individual(){
+    public function mutate_individual(): Individual
+    {
         global $MUTATION_RATE;
         global $INDIVIDUAL_LENGTH;
         // choose how many mutation

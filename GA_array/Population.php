@@ -22,14 +22,8 @@ class Population{
 
     public function __toString(){
         $result = "POPULATION\n";
-        $i=0;
         foreach($this->set as $individual){
-            //var_dump($individual);
-            //echo $individual->__toString();
             $result .= $individual->__toString();
-            //$result .= $i;
-            //$i++;
-
         }
         return $result;
     }
