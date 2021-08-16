@@ -21,6 +21,9 @@ class IndividualTest extends \PHPUnit\Framework\TestCase {
         $this -> assertIsFloat($i->fitness);
         $this -> assertIsInt($i->personal_number);
 
+        //attribute values within proper range
+        $this -> assertContainsOnly([0, 1], $i->array);
+
 
     }
 }
