@@ -26,7 +26,7 @@ class IndividualTest extends \PHPUnit\Framework\TestCase {
         $this -> assertContains(0, $i->array);
         $this -> assertContains(1, $i->array);
         $this -> assertNotContains(3, $i->array);
-
+      
         global $INDIVIDUAL_LENGTH;
         $this -> assertEquals($INDIVIDUAL_LENGTH, count($i->array));
 
