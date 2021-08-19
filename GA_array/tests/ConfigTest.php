@@ -8,4 +8,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase {
         $c = new Config();
         $this -> assertInstanceOf(Config::class, $c);
     }
+
+    function testSetValue(){
+        $c = new Config();
+
+    }
+
+
 }

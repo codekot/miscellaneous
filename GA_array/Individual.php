@@ -1,6 +1,5 @@
 <?php
 
-
 class Individual {
     static private int $current_number = 1;
 
