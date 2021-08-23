@@ -25,12 +25,12 @@ class Config{
         $this->GOAL = $this->setGoal();
     }
 
-    public function setValue($var, $value){
-        $this -> $var = $value;
-        if($var="INDIVIDUAL_LENGTH"){
-            $this->GOAL = setGoal();
-        }
-    }
+//    public function setValue($var, $value){
+//        $this -> $var = $value;
+//        if($var="INDIVIDUAL_LENGTH"){
+//            $this->GOAL = setGoal();
+//        }
+//    }
 
     public function setGoal(){
         return array_map(function (){return 1;}, range(1, $this->INDIVIDUAL_LENGTH));
@@ -43,6 +43,8 @@ class Config{
             echo "else if";
             $this->INDIVIDUAL_LENGTH = $value;
             $this->GOAL = $this->setGoal();
+        } elseif ($name == "GOAL"){
+            throw new Exception("access denied, to change GOAL, change INDIVIDUAL_LENGTH");
         }
     }
 
@@ -51,10 +53,9 @@ class Config{
             return $this->INDIVIDUAL_LENGTH;
         } elseif ($name == "GOAL"){
             return $this->GOAL;
+        } else {
+            throw new Exception("invalid property name");
         }
     }
 }
 
-$c = new Config();
-$c->INDIVIDUAL_LENGTH = 20;
-echo $c->INDIVIDUAL_LENGTH;
