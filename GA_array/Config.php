@@ -25,13 +25,6 @@ class Config{
         $this->GOAL = $this->setGoal();
     }
 
-//    public function setValue($var, $value){
-//        $this -> $var = $value;
-//        if($var="INDIVIDUAL_LENGTH"){
-//            $this->GOAL = setGoal();
-//        }
-//    }
-
     public function setGoal(){
         return array_map(function (){return 1;}, range(1, $this->INDIVIDUAL_LENGTH));
     }

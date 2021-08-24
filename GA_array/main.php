@@ -2,15 +2,15 @@
 
 // using genetic algorithm MaxOne on array
 
-$INDIVIDUAL_LENGTH = 10;
-$GOAL = array_map(function (){return 1;}, range(1, $INDIVIDUAL_LENGTH));
-$IND_NUMBER = 1;
-$BORDER = 4;
-$MUTATION_RATE = 1;
-$FITTEST_QUOTE = 4;
-$EVOLUTION_CYCLES = 100;
-$CURRENT_POPULATION = [];
-$ITERATIONS = 1000;
+//$INDIVIDUAL_LENGTH = 10;
+//$GOAL = array_map(function (){return 1;}, range(1, $INDIVIDUAL_LENGTH));
+//$IND_NUMBER = 1;
+//$BORDER = 4;
+//$MUTATION_RATE = 1;
+//$FITTEST_QUOTE = 4;
+//$EVOLUTION_CYCLES = 100;
+//$CURRENT_POPULATION = [];
+//$ITERATIONS = 1000;
 
 require_once  "Individual.php";
 
