@@ -16,6 +16,8 @@ class PopulationTest extends \PHPUnit\Framework\TestCase
         $this -> assertObjectHasAttribute("goal_achieved", $p);
         $this -> assertIsArray($p->set);
         $this -> assertIsBool($p->goal_achieved);
+        $this -> assertContainsOnly("object", $p->set);
+        $this -> assertContainsOnlyInstancesOf("Individual", $p->set);
     }
 
 }
