@@ -11,8 +11,8 @@ $CURRENT_POPULATION = [];
 $ITERATIONS = 1000;
 
 class Config{
-    private $INDIVIDUAL_LENGTH = 10;
-    private $GOAL = [];
+    private  $INDIVIDUAL_LENGTH = 10;
+    private  $GOAL = [];
     public $IND_NUMBER = 1;
     public $POPULATION_SIZE = 10;
     public $BORDER = 4;
@@ -22,8 +22,21 @@ class Config{
     public $CURRENT_POPULATION = [];
     public $ITERATIONS = 1000;
 
-    public function __construct(){
-        $this->GOAL = $this->setGoal();
+    private static $instance = null;
+
+    public static function getInstance(): Config
+    {
+        if(static::$instance === null){
+            static::$instance = new static();
+            static::$instance->GOAL = static::$instance->setGoal();
+        }
+        return static::$instance;
+    }
+
+    protected function __construct(){
+    }
+
+    protected function __clone(){
     }
 
     public function setGoal(){
@@ -34,7 +47,6 @@ class Config{
         if(!property_exists($this, $name)){
             throw new Exception("invalid property name");
         } elseif ($name == "INDIVIDUAL_LENGTH"){
-            echo "else if";
             $this->INDIVIDUAL_LENGTH = $value;
             $this->GOAL = $this->setGoal();
         } elseif ($name == "GOAL"){
@@ -53,3 +65,5 @@ class Config{
     }
 }
 
+$c = Config::getInstance();
+$c->INDIVIDUAL_LENGTH = 15;
